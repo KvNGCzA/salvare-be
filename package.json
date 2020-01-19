@@ -1,0 +1,37 @@
+{
+  "name": "salvare-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/KvNGCzA/salvare-be.git",
+  "author": "KvNGCzA <akanmuoluwadamilare@yahoo.com>",
+  "license": "MIT",
+  "scripts": {
+    "build-server": "babel src --out-dir dist -s",
+    "clean": "rm -rf dist && mkdir dist",
+    "build": "yarn run clean && yarn run build-server",
+    "start": "NODE_ENV=production yarn run build && node dist/index.js",
+    "start:dev": "NODE_ENV=development DEBUG=log,app:* nodemon --signal SIGTERM --exec babel-node src/index.js",
+    "db:setup": "sequelize db:drop && sequelize db:create && yarn db:rollmigrate",
+    "db:seed": "node_modules/.bin/sequelize db:seed:all $* --seeders-path src/database/seeders",
+    "db:migrate": "sequelize db:migrate",
+    "db:rollback": "sequelize db:migrate:undo:all",
+    "db:rollmigrate": "yarn db:rollback && yarn db:migrate && yarn db:seed",
+    "heroku-postbuild": "yarn build"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
+    "pg": "^7.17.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.21.3",
+    "sequelize-cli": "^5.5.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "nodemon": "^2.0.2"
+  }
+}
