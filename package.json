@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/KvNGCzA/salvare-be.git",
-  "author": "KvNGCzA <akanmuoluwadamilare@yahoo.com>",
+  "author": "KvNGCzA <akanmuchris@gmail.com>",
   "license": "MIT",
   "scripts": {
     "build-server": "babel src --out-dir dist -s",
     "clean": "rm -rf dist && mkdir dist",
     "build": "yarn run clean && yarn run build-server",
-    "start": "NODE_ENV=production yarn run build && node dist/index.js",
+    "start": "yarn run build && node dist/index.js",
     "start:dev": "nodemon --exec babel-node server/index.js",
     "db:setup": "sequelize db:drop && sequelize db:create && yarn db:rollmigrate",
     "db:seed": "node_modules/.bin/sequelize db:seed:all $* --seeders-path database/seeders",
@@ -19,6 +19,7 @@
     "heroku-postbuild": "yarn build"
   },
   "dependencies": {
+    "bcrypt": "^3.0.7",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -31,11 +32,11 @@
     "sequelize-cli": "^5.5.1"
   },
   "devDependencies": {
-    "babel": "^6.23.0",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^8.0.6",
-    "babel-preset-env": "^1.7.0",
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.8.3",
+    "@babel/node": "^7.0.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
     "nodemon": "^2.0.2"
   }
 }
