@@ -10,11 +10,11 @@
     "clean": "rm -rf dist && mkdir dist",
     "build": "yarn run clean && yarn run build-server",
     "start": "NODE_ENV=production yarn run build && node dist/index.js",
-    "start:dev": "NODE_ENV=development DEBUG=log,app:* nodemon --signal SIGTERM --exec babel-node src/index.js",
+    "start:dev": "nodemon --exec babel-node server/index.js",
     "db:setup": "sequelize db:drop && sequelize db:create && yarn db:rollmigrate",
-    "db:seed": "node_modules/.bin/sequelize db:seed:all $* --seeders-path src/database/seeders",
-    "db:migrate": "sequelize db:migrate",
-    "db:rollback": "sequelize db:migrate:undo:all",
+    "db:seed": "node_modules/.bin/sequelize db:seed:all $* --seeders-path database/seeders",
+    "db:migrate": "node_modules/.bin/sequelize db:migrate",
+    "db:rollback": "node_modules/.bin/sequelize db:migrate:undo:all",
     "db:rollmigrate": "yarn db:rollback && yarn db:migrate && yarn db:seed",
     "heroku-postbuild": "yarn build"
   },
@@ -31,7 +31,11 @@
     "sequelize-cli": "^5.5.1"
   },
   "devDependencies": {
+    "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.6",
+    "babel-preset-env": "^1.7.0",
     "nodemon": "^2.0.2"
   }
 }
