@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Role.associate = function(models) {
     // associations can be defined here
+    Role.hasMany(models.UserRole, {
+      foreignKey: 'roleId',
+      onDelete: 'cascade'
+    })
   };
   return Role;
 };

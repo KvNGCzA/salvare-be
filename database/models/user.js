@@ -11,6 +11,15 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   User.associate = function(models) {
     // associations can be defined here
+    User.hasMany(models.UserRole, {
+      foreignKey: 'userId',
+      onDelete: 'cascade'
+    })
+
+    User.hasMany(models.ActiveCaseDetail, {
+      foreignKey: 'lawyerId',
+      onDelete: 'cascade'
+    })
   };
   return User;
 };

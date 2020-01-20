@@ -10,6 +10,14 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   ActiveCaseDetail.associate = function(models) {
     // associations can be defined here
+    ActiveCaseDetail.belongsTo(models.Case, {
+      foreignKey: 'caseId',
+      onDelete: 'cascade'
+    })
+    ActiveCaseDetail.belongsTo(models.User, {
+      foreignKey: 'lawyerId',
+      onDelete: 'cascade'
+    })
   };
   return ActiveCaseDetail;
 };
