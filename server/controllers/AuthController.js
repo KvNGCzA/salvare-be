@@ -2,9 +2,12 @@ import bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
 import helpers from '../helpers';
 import models from '../../database/models';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const { responseMessage, createToken } = helpers;
-const { User } = models;
+const { User, UserRole } = models;
 
 export default class AuthController {
   static async signup(req, res, next) {
@@ -25,9 +28,18 @@ export default class AuthController {
         email: req.body.email.toLowerCase(),
         password: bcrypt.hashSync(req.body.password, 10)
       });
-      delete user.password;
+      await UserRole.create({
+        userId: user.id,
+        roleId: process.env.LAWYER_ID
+      })
+      // await user.addUserRoles([user.id], process.env.LAWYER_ID)
+      delete user.dataValues.password;
+      let roles = await user.getUserRoles({
+        attributes: ['roleId']
+      });
+      roles = roles.map(role => role.roleId);
       return responseMessage({
-        data: { message: 'done', user, token: createToken(user.id) },
+        data: { message: 'done', user, token: createToken(user.id), roles },
         status: 200,
         res
       });

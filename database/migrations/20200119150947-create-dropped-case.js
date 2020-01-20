@@ -9,7 +9,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       caseId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Cases',
+          key: 'id'
+        }
       },
       dropReason: {
         type: Sequelize.STRING

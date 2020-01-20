@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   DroppedCase.associate = function(models) {
     // associations can be defined here
+    DroppedCase.belongsTo(models.Case, {
+      foreignKey: 'caseId',
+      onDelete: 'cascade'
+    })
   };
   return DroppedCase;
 };

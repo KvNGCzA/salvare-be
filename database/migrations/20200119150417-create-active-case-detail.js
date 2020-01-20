@@ -11,10 +11,18 @@ module.exports = {
       caseId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Cases',
+          key: 'id'
+        }
       },
       lawyerId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id'
+        }
       },
       court: {
         type: Sequelize.STRING
