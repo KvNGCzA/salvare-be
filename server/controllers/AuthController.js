@@ -32,10 +32,12 @@ export default class AuthController {
         userId: user.id,
         roleId: process.env.LAWYER_ID
       })
-      delete user.password;
-      const roles = await user.getUserRoles({
-        attributes: ['userId', 'roleId']
+      // await user.addUserRoles([user.id], process.env.LAWYER_ID)
+      delete user.dataValues.password;
+      let roles = await user.getUserRoles({
+        attributes: ['roleId']
       });
+      roles = roles.map(role => role.roleId);
       return responseMessage({
         data: { message: 'done', user, token: createToken(user.id), roles },
         status: 200,
