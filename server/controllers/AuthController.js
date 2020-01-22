@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const { responseMessage, createToken } = helpers;
+const { responseMessage, createToken, sendMail } = helpers;
 const { User, UserRole } = models;
 
 export default class AuthController {
@@ -39,8 +39,17 @@ export default class AuthController {
         attributes: ['roleId']
       });
       roles = roles.map(role => role.roleId);
+      const data = {
+        from: 'Salvare <no-reply@salvare.com>',
+        to: req.body.email,
+        subject: 'Welcome to salvare, Please verify your email',
+        text: `${process.env.FRONTEND_BASE_URL}/auth/verify?token=${createToken(user.id)}`
+      };
+      // send email
+      sendMail.send(data, (err, body) => { console.log(err) })
+
       return responseMessage({
-        data: { message: 'done', user, token: createToken(user.id), roles },
+        data: { message: 'sign up successful, please check your email', user, roles },
         status: 201,
         res
       });
@@ -75,6 +84,35 @@ export default class AuthController {
           token: createToken(user.id),
           roles
         },
+        status: 200,
+        res
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async verifyEmail(req, res, next) {
+    try {
+      const { id } = req.userData;
+      const user = await User.findByPk(id);
+      if (user.emailVerified === true) {
+        return responseMessage({
+          data: { message: 'your account is already verified' },
+          status: 200,
+          res
+        });
+      }
+      user.emailVerified = true;
+      await user.save();
+      await user.reload();
+      delete user.dataValues.password;
+      let roles = await user.getUserRoles({
+        attributes: ['roleId']
+      });
+      roles = roles.map(role => role.roleId);
+      return responseMessage({
+        data: { message: 'email successfully verified', user, roles },
         status: 200,
         res
       });
