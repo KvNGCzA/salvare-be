@@ -43,4 +43,30 @@ export default class UserController {
       next(error)
     }
   }
+
+  static async updatePersonalInformation (req, res, next) {
+    try {
+      const user = await User.findByPk(req.userData.id);
+      let message = {};
+      if (req.body.email && user.email !== req.body.email.toLowerCase()) {
+        // update email
+        await user.update({ email: req.body.email.toLowerCase() })
+        message.email = 'email successfully updated';
+      }
+      if (req.body.fullname && user.fullname !== req.body.fullname.toLowerCase()) {
+        // update fullname
+        await user.update({ fullname: req.body.fullname.toLowerCase() })
+        message.fullname = 'fullname successfully updated';
+      }
+      if (req.body.phone && user.phone !== req.body.phone) {
+        // update fullname
+        await user.update({ phone: req.body.phone })
+        message.phone = 'phone number successfully updated';
+      }
+      if (Object.keys(message).length === 0) message = 'nothing was updated';
+      return responseMessage({ data: { message }, status: 200, res });
+    } catch (error) {
+      next(error)
+    }
+  }
 }
