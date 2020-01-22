@@ -48,20 +48,56 @@ export default class UserController {
     try {
       const user = await User.findByPk(req.userData.id);
       let message = {};
-      if (req.body.email && user.email !== req.body.email.toLowerCase()) {
+      const confirmPassword = user && req.body.password ? await bcrypt.compare(req.body.password, user.password) : false;
+      if (!confirmPassword) 
+        return responseMessage({
+          data: { message: 'the password you entered is incorrect'
+        }, status: 400, res });
+      if (req.body.email && (user.email !== req.body.email.toLowerCase())) {
         // update email
         await user.update({ email: req.body.email.toLowerCase() })
         message.email = 'email successfully updated';
       }
-      if (req.body.fullname && user.fullname !== req.body.fullname.toLowerCase()) {
+      if (req.body.fullname && (user.fullname !== req.body.fullname.toLowerCase())) {
         // update fullname
         await user.update({ fullname: req.body.fullname.toLowerCase() })
         message.fullname = 'fullname successfully updated';
       }
-      if (req.body.phone && user.phone !== req.body.phone) {
+      if (req.body.phone && (user.phone !== req.body.phone)) {
         // update fullname
         await user.update({ phone: req.body.phone })
         message.phone = 'phone number successfully updated';
+      }
+      if (Object.keys(message).length === 0) message = 'nothing was updated';
+      return responseMessage({ data: { message }, status: 200, res });
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async updateProfessionalInformation (req, res, next) {
+    try {
+      const user = await User.findByPk(req.userData.id);
+      let message = {};
+      const confirmPassword = user && req.body.password ? await bcrypt.compare(req.body.password, user.password) : false;
+      if (!confirmPassword) 
+        return responseMessage({
+          data: { message: 'the password you entered is incorrect'
+        }, status: 400, res });
+      if (req.body.lawFirm && (user.lawFirm !== req.body.lawFirm.toLowerCase())) {
+        // update lawFirm
+        await user.update({ lawFirm: req.body.lawFirm.toLowerCase() })
+        message.lawFirm = 'law firm successfully updated';
+      }
+      if (req.body.officeAddress && (user.officeAddress !== req.body.officeAddress.toLowerCase())) {
+        // update officeAddress
+        await user.update({ officeAddress: req.body.officeAddress.toLowerCase() })
+        message.officeAddress = 'office address successfully updated';
+      }
+      if (req.body.yearsOfExperience && (user.yearsOfExperience !== req.body.yearsOfExperience)) {
+        // update yearsOfExperience
+        await user.update({ yearsOfExperience: req.body.yearsOfExperience })
+        message.yearsOfExperience = 'years of experience successfully updated';
       }
       if (Object.keys(message).length === 0) message = 'nothing was updated';
       return responseMessage({ data: { message }, status: 200, res });
