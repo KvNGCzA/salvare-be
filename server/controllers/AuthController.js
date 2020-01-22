@@ -40,7 +40,7 @@ export default class AuthController {
       roles = roles.map(role => role.roleId);
       return responseMessage({
         data: { message: 'done', user, token: createToken(user.id), roles },
-        status: 200,
+        status: 201,
         res
       });
     } catch (error) {
@@ -48,36 +48,37 @@ export default class AuthController {
     }
   }
 
-  // static async login(req, res, next) {
-  //   try {
-  //     const { email, password } = req.body;
-  //     // find user
-  //     const user = await User.findOne({ where: { email: { [Op.iLike]: `%${email}%` } } });
-  //     // confirm password
-  //     const confirmUser = user ? await bcrypt.compare(password, user.password) : false;
-  //     if (!confirmUser) {
-  //       return responseMessage({
-  //         data: { message: 'email/password do not match' },
-  //         status: 400,
-  //         res
-  //       });
-  //     }
-  //     delete user.dataValues.password;
-  //     const overview = await UserController.calculateInvestmentOverview({
-  //       userData: { id: user.id }
-  //     });
-  //     return responseMessage({
-  //       data: {
-  //         message: 'login successful',
-  //         user,
-  //         overview,
-  //         token: createToken(user.id)
-  //       },
-  //       status: 200,
-  //       res
-  //     });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
+  static async login(req, res, next) {
+    try {
+      const { email, password } = req.body;
+      // find user
+      const user = await User.findOne({ where: { email: email.toLowerCase() } });
+      // confirm password
+      const confirmUser = user ? await bcrypt.compare(password, user.password) : false;
+      if (!confirmUser) {
+        return responseMessage({
+          data: { message: 'email/password do not match' },
+          status: 400,
+          res
+        });
+      }
+      delete user.dataValues.password;
+      let roles = await user.getUserRoles({
+        attributes: ['roleId']
+      });
+      roles = roles.map(role => role.roleId);
+      return responseMessage({
+        data: {
+          message: 'login successful',
+          user,
+          token: createToken(user.id),
+          roles
+        },
+        status: 200,
+        res
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
