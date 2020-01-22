@@ -25,6 +25,7 @@ export default class AuthController {
       // create user
       const user = await User.create({
         ...req.body,
+        fullname: req.body.fullname.toLowerCase(),
         email: req.body.email.toLowerCase(),
         password: bcrypt.hashSync(req.body.password, 10)
       });
