@@ -21,7 +21,6 @@ class UserValidation {
 
   static validateFullname() {
     return check('fullname')
-      .exists()
       .notEmpty()
       .withMessage('please enter a fullname')
       .custom((fullname) => {
@@ -32,8 +31,8 @@ class UserValidation {
 
   static validateLogin() {
     return [
-      UserValidation.validateEmail(req),
-      UserValidation.validatePassword(req),
+      UserValidation.validateEmail(),
+      UserValidation.validatePassword(),
       (req, res, next) => formattedError(req, res, next),
     ];
   }
