@@ -11,10 +11,18 @@ class UserValidation {
       .withMessage('please enter a valid email');
   }
 
-  static validatePassword(req) {
+  static validatePassword() {
     return check('password')
       .notEmpty()
       .withMessage('please enter a password')
+      .isLength({ min: 8 })
+      .withMessage('password must be more than 7 characters');
+  }
+
+  static validateNewPassword() {
+    return check('newPassword')
+      .notEmpty()
+      .withMessage('please enter a new password')
       .isLength({ min: 8 })
       .withMessage('password must be more than 7 characters');
   }
@@ -33,6 +41,14 @@ class UserValidation {
     return [
       UserValidation.validateEmail(),
       UserValidation.validatePassword(),
+      (req, res, next) => formattedError(req, res, next),
+    ];
+  }
+
+  static validateUpdatePassword() {
+    return [
+      UserValidation.validatePassword(),
+      UserValidation.validateNewPassword(),
       (req, res, next) => formattedError(req, res, next),
     ];
   }
