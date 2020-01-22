@@ -19,6 +19,7 @@ module.exports = {
       status: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: 'open'
       },
       state: {
         type: Sequelize.STRING,

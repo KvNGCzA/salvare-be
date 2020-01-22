@@ -18,7 +18,7 @@ module.exports = {
         allowNull: false,
       },
       phone: {
-        type: Sequelize.STRING,
+        type: Sequelize.BIGINT,
         allowNull: false,
       },
       lawFirm: {
@@ -33,6 +33,16 @@ module.exports = {
       },
       yearsOfExperience: {
         type: Sequelize.INTEGER
+      },
+      emailVerified: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      lawyerVerified: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
       },
       createdAt: {
         allowNull: false,
