@@ -9,7 +9,9 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       caseId: {
-        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: Sequelize.UUIDV4,
+        type: Sequelize.UUID,
         references: {
           model: 'Cases',
           key: 'id'

@@ -1,7 +1,12 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const DroppedCase = sequelize.define('DroppedCase', {
-    caseId: DataTypes.INTEGER,
+    caseId: {
+      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      type: DataTypes.UUID
+    },
     dropReason: DataTypes.STRING,
     additionalInfo: DataTypes.TEXT
   }, {});

@@ -1,6 +1,12 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Case = sequelize.define('Case', {
+    id: {
+      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      type: DataTypes.UUID
+    },
     shortDescription: DataTypes.TEXT,
     longDescription: DataTypes.TEXT,
     status: DataTypes.STRING,

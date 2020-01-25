@@ -39,14 +39,14 @@ export default class AuthController {
         attributes: ['roleId']
       });
       roles = roles.map(role => role.roleId);
-      const data = {
+      const mail = {
         from: 'Salvare <no-reply@salvare.com>',
         to: req.body.email,
         subject: 'Welcome to salvare, Please verify your email',
-        text: `${process.env.FRONTEND_BASE_URL}/auth/verify?token=${createToken(user.id)}`
+        html: `<a href="${process.env.FRONTEND_BASE_URL}/auth/verify?token=${createToken(user.id)}" target="_blank">Verify email</a>`
       };
       // send email
-      sendMail.send(data, (err, body) => { console.log(err) })
+      sendMail.send(mail, (err, body) => { console.log(err) })
 
       return responseMessage({
         data: { message: 'sign up successful, please check your email', user, roles },

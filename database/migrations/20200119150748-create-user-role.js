@@ -9,8 +9,9 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
-        type: Sequelize.INTEGER,
         allowNull: false,
+        defaultValue: Sequelize.UUIDV4,
+        type: Sequelize.UUID,
         references: {
           model: 'Users',
           key: 'id'

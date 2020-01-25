@@ -1,8 +1,8 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const ActiveCaseDetail = sequelize.define('ActiveCaseDetail', {
-    caseId: DataTypes.INTEGER,
-    lawyerId: DataTypes.INTEGER,
+    caseId: DataTypes.UUID,
+    lawyerId: DataTypes.UUID,
     court: DataTypes.STRING,
     judgeName: DataTypes.STRING,
     trialStartDate: DataTypes.DATE,
