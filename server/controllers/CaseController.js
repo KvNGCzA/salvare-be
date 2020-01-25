@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const { responseMessage, createToken, sendMail } = helpers;
-const { Case } = models;
+const { Case, ActiveCaseDetail } = models;
 
 export default class CaseController {
   static async createCase (req, res, next) {
@@ -28,6 +28,28 @@ export default class CaseController {
       // send email
       sendMail.send(mail, (err, body) => { console.log(err) })
       responseMessage({ data: { message: 'case successfully created', caseDetails }, status: 201, res})
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async assignCase (req, res, next) {
+    try {
+      const alreadyAssigned = await ActiveCaseDetail.findOne({ where: { caseId: req.params.caseId } });
+      if (alreadyAssigned) return responseMessage({
+        data: { message: `this case is already assigned to ${alreadyAssigned.lawyerId === req.userData.id ? 'you' : 'another lawyer'}` }, status: 409, res
+      });
+      const activatedCase = await ActiveCaseDetail.create({
+        caseId: req.params.caseId, lawyerId: req.userData.id
+      });
+      const cases = await activatedCase.getCase();
+      return responseMessage({
+        data: {
+          message: `case successfully assigned to ${req.userData.fullname}`,
+          case: cases
+        },
+        status: 201,
+        res
+      });
     } catch (error) {
       next(error);
     }

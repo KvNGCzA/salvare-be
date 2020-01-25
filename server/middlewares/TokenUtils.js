@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import helpers from '../helpers';
+import model from '../../database/models';
 
 const { responseMessage } = helpers;
 
@@ -22,7 +23,8 @@ export default class TokenUtils {
       }
     );
     if (!decoded.message) {
-      req.userData = decoded;
+      const user = await model.User.findByPk(decoded.id);
+      req.userData = user;
       return next();
     }
     if (decoded.message === 'jwt expired') {
