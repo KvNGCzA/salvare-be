@@ -34,6 +34,10 @@ export default class CaseController {
   }
   static async assignCase (req, res, next) {
     try {
+      const alreadyAssigned = await ActiveCaseDetail.findOne({ where: { caseId: req.params.caseId } });
+      if (alreadyAssigned) return responseMessage({
+        data: { message: 'this case is already assigned' }, status: 409, res
+      });
       const activatedCase = await ActiveCaseDetail.create({
         caseId: req.params.caseId, lawyerId: req.userData.id
       });
