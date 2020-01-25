@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       caseId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: 'Cases',
@@ -17,7 +17,7 @@ module.exports = {
         }
       },
       lawyerId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: 'Users',

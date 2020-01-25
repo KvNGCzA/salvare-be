@@ -1,7 +1,11 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const UserRole = sequelize.define('UserRole', {
-    userId: DataTypes.INTEGER,
+    userId: {
+      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
+      type: DataTypes.UUID
+    },
     roleId: DataTypes.INTEGER
   }, {});
   UserRole.associate = function(models) {
