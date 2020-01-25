@@ -36,7 +36,7 @@ export default class CaseController {
     try {
       const alreadyAssigned = await ActiveCaseDetail.findOne({ where: { caseId: req.params.caseId } });
       if (alreadyAssigned) return responseMessage({
-        data: { message: 'this case is already assigned' }, status: 409, res
+        data: { message: `this case is already assigned to ${alreadyAssigned.lawyerId === req.userData.id ? 'you' : 'another lawyer'}` }, status: 409, res
       });
       const activatedCase = await ActiveCaseDetail.create({
         caseId: req.params.caseId, lawyerId: req.userData.id
